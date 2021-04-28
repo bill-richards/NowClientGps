@@ -13,7 +13,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 
   _display.leftHeading( (String)"Alt: " + _taskRunner->altitudeInMeters() + " m");
 
-  sprintf(buffer, "Lat: %f", _taskRunner->lattitude());
+  sprintf(buffer, "Lat: %f", _taskRunner->latitude());
   _display.left(MIDDLE, buffer);
 
   sprintf(buffer, "Lng: %f", _taskRunner->longitude());

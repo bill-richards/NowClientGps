@@ -2,9 +2,8 @@
 #define _GpsTask_h_
 
 #include <NowCommon.h>
+#include <TaskRunner.h>
 #include <TinyGPS++.h>
-
-void gpsTask(void * parameter);
 
 class GpsTaskRunner
 {
@@ -32,13 +31,15 @@ public:
     void begin() 
     { 
         Serial2.begin(GPSBaud); 
-        xTaskCreatePinnedToCore(gpsTask, "GPS_TSK", 10000, this, _taskPriority, NULL, 1);
+        xTaskCreatePinnedToCore(task, "GPS_TSK", 10000, this, _taskPriority, NULL, 1);
     }
     double altitudeInMeters() { return _gpsModule.altitude.meters(); }
-    double lattitude() { return _gpsModule.location.lat(); }
+    double latitude() { return _gpsModule.location.lat(); }
     double longitude() { return _gpsModule.location.lng(); }
     void run();
     void sendData();
 };
+
+GpsTaskRunner* _runner;
 
 #endif

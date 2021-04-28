@@ -2,7 +2,7 @@
 
 bool GpsTaskRunner::datagramIsValid() 
 {
-  return _datagram.altitude != 0 && _datagram.longitude != 0 && _datagram.longitude != 0;
+  return _datagram.gps.altitude != 0 && _datagram.gps.longitude != 0 && _datagram.gps.latitude != 0;
 }
 
 void GpsTaskRunner::sendData()
@@ -11,12 +11,12 @@ void GpsTaskRunner::sendData()
 
   if (locationIsValid())
   {
-    _datagram.lattitude = lattitude();
-    _datagram.longitude = longitude();
+    _datagram.gps.latitude = latitude();
+    _datagram.gps.longitude = longitude();
   }
 
   if(altitudeIsValid())
-    _datagram.altitude = altitudeInMeters();
+    _datagram.gps.altitude = altitudeInMeters();
 
   Serial.println("Sending message");
   if(datagramIsValid() )
@@ -29,29 +29,27 @@ void GpsTaskRunner::sendData()
 
 void GpsTaskRunner::run()
 {
-    const ulong currentMillis = millis();
+  const ulong currentMillis = millis();
 
-    while(Serial2.available() > 0)
-    {
-        if (!_gpsModule.encode(Serial2.read()) 
-                || currentMillis - _previousMillis < _interval) continue;
-                
-        sendData(); 
-        break;
-    }
+  while(Serial2.available() > 0)
+  {
+    if (!_gpsModule.encode(Serial2.read()) 
+            || currentMillis - _previousMillis < _interval) continue;
+            
+    sendData(); 
+    break;
+  }
 }
 
-GpsTaskRunner* _runner;
-
-void gpsTask(void * parameter)
+void task(void * parameter)
 {
-    _runner = (GpsTaskRunner*)parameter;    
-    Serial.println("Starting GPS monitor task");
+  _runner = (GpsTaskRunner*)parameter;    
+  Serial.println("Starting GPS monitor task");
 
-    for( ;; )
-    {
-        _runner->run();
-        portYIELD();
-        vTaskDelay(100);
-    }
+  for( ;; )
+  {
+    _runner->run();
+    portYIELD();
+    vTaskDelay(100);
+  }
 }
