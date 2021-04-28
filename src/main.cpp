@@ -1,21 +1,11 @@
 #include <Gsdc_SSD1306.h>
 #include "GpsTask.h"
 
-//void gpsTask(void * parameter);
-//bool datagramIsValid();
-
 const char BOARD_ID[16] = "Gps Collector";
 
-GpsTaskRunner * _taskRunner;
-//static const uint32_t GPSBaud = 9600;
-//TinyGPSPlus gps;
-
 DEFAULT_NVM()
-//esp_datagram _datagram;
-//unsigned long _previousMillis     = 0; // Stores last time temperature was published
-
+GpsTaskRunner * _taskRunner;
 Gsdc_SSD1306 _display(0x3C, SDA, SCL);
-
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   char buffer[11];
@@ -34,8 +24,6 @@ String _serverMacAddress;
 
 void setup() {
   Serial.begin(250000);
-//  Serial2.begin(GPSBaud);
-
   Wire.begin();
   _display.begin();
 
@@ -51,38 +39,9 @@ void setup() {
   _display.scroll(MIDDLE, BOARD_ID);
   _taskRunner = new GpsTaskRunner(BOARD_ID, _serverMacAddress, 2);
   _taskRunner->begin();
-//  xTaskCreatePinnedToCore(gpsTask, "GPS_TSK", 10000, NULL, 2, NULL, 1);
 }
 
-void loop() {
+void loop() 
+{
   delay(50);
 } 
-
-//bool datagramIsValid() 
-//{
-//  return _datagram.altitude != 0 && _datagram.longitude != 0 && _datagram.longitude != 0;
-//}
-
-/*
-void sendData()
-{
-  PREPARE_DATAGRAM(NowTransmittedDataTypes::GPS, BOARD_ID)
-
-  if (gps.location.isValid())
-  {
-    _datagram.lattitude = gps.location.lat();
-    _datagram.longitude = gps.location.lng();
-  }
-
-  if(gps.altitude.isValid())
-    _datagram.altitude = gps.altitude.meters();
-
-  Serial.println("Sending message");
-  if(datagramIsValid() )
-  { 
-    SEND_MESSAGE_USING_ESP_NOW(local_broadcastAddress, _datagram) 
-  }
-    
-  _previousMillis = millis(); 
-}
-*/

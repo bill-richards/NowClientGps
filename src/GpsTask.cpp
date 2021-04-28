@@ -1,6 +1,5 @@
 #include "GpsTask.h"
 
-
 bool GpsTaskRunner::datagramIsValid() 
 {
   return _datagram.altitude != 0 && _datagram.longitude != 0 && _datagram.longitude != 0;
