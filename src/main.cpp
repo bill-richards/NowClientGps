@@ -4,19 +4,19 @@
 const char BOARD_ID[16] = "Gps Collector";
 
 DEFAULT_NVM()
-GpsTaskRunner * _taskRunner;
+GpsTaskRunner * TaskRunner;
 Gsdc_SSD1306 _display(0x3C, SDA, SCL);
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   char buffer[11];
   _display.clear();
 
-  _display.leftHeading( (String)"Alt: " + _taskRunner->altitudeInMeters() + " m");
+  _display.leftHeading( (String)"Alt: " + TaskRunner->altitudeInMeters() + " m");
 
-  sprintf(buffer, "Lat: %f", _taskRunner->latitude());
+  sprintf(buffer, "Lat: %f", TaskRunner->latitude());
   _display.left(MIDDLE, buffer);
 
-  sprintf(buffer, "Lng: %f", _taskRunner->longitude());
+  sprintf(buffer, "Lng: %f", TaskRunner->longitude());
   _display.left(BOTTOM, buffer);
 }
 
@@ -37,8 +37,8 @@ void setup() {
   _display.scrub();
   
   _display.scroll(MIDDLE, BOARD_ID);
-  _taskRunner = new GpsTaskRunner(BOARD_ID, _serverMacAddress, 2);
-  _taskRunner->begin();
+  TaskRunner = new GpsTaskRunner(BOARD_ID, _serverMacAddress, 2);
+  TaskRunner->begin();
 }
 
 void loop() 

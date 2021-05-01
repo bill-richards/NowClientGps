@@ -43,12 +43,12 @@ void GpsTaskRunner::run()
 
 void task(void * parameter)
 {
-  _runner = (GpsTaskRunner*)parameter;    
+  TaskRunner = (GpsTaskRunner*)parameter;    
   Serial.println("Starting GPS monitor task");
 
   for( ;; )
   {
-    _runner->run();
+    TaskRunner->run();
     portYIELD();
     vTaskDelay(100);
   }

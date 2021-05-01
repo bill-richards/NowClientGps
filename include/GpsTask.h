@@ -40,6 +40,6 @@ public:
     void sendData();
 };
 
-GpsTaskRunner* _runner;
+extern GpsTaskRunner * TaskRunner;
 
 #endif
